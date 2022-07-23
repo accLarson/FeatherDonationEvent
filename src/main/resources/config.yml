@@ -1,0 +1,17 @@
+general:
+  1:
+    stand: [ 0,0,0 ]
+    sign: [ 0,0,0 ]
+  2:
+    stand: [ 0,0,0 ]
+    sign: [ 0,0,0 ]
+  3:
+    stand: [ 0,0,0 ]
+    sign: [ 0,0,0 ]
+newest:
+  stand: [ 0,0,0 ]
+  sign: [ 0,0,0 ]
+
+messages:
+  general-display-updated: "<white>• <#656b96>Donor display updated. | <#949bd1><donors>"
+  no-command-permission: "<#656b96>You don't have permission to use that command."

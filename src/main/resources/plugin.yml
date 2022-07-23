@@ -1,0 +1,21 @@
+name: FeatherDonationEvent
+version: '${project.version}'
+main: com.zerek.featherdonationevent.FeatherDonationEvent
+api-version: 1.19
+depend:
+  - Vault
+  - BuycraftX
+authors: [ Zerek ]
+description: Creates an event when a user donates to f64
+commands:
+  donordisplay:
+    description: Admin commands for donor displays.
+    usage: /donordisplay update
+  alertdonation:
+    description: alerts to a donation
+  alertdonationexpire:
+    description: alerts to a donation expiry
+  alertsupporter:
+    description: alerts to a new supporter
+  alertsupporterrenew:
+    description: alerts to a renewed supporter
