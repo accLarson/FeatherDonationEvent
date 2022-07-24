@@ -2,6 +2,8 @@ package com.zerek.featherdonationevent.listeners;
 
 import com.zerek.featherdonationevent.FeatherDonationEvent;
 import com.zerek.featherdonationevent.events.DonationEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,23 +28,24 @@ public class DonationListener implements Listener {
 
     @EventHandler
     public void onDonation(DonationEvent event){
-        OfflinePlayer p = plugin.getServer().getOfflinePlayer(UUID.fromString(event.getId()));
+        OfflinePlayer donor = plugin.getServer().getOfflinePlayer(UUID.fromString(event.getId()));
+        if (plugin.getNewestDisplay().keySet().iterator().next().getChunk().isEntitiesLoaded()){
+            setStandHead(plugin.getNewestDisplay().keySet().iterator().next(), donor);
+            setSign(plugin.getNewestDisplay().get(plugin.getNewestDisplay().keySet().iterator().next()), donor);
+        }
+    }
 
-        Location standLoc = plugin.getNewDisplay().get("stand").getBlock().getLocation();
-        standLoc.getChunk().load();
-        List<ArmorStand> standList = (List<ArmorStand>) standLoc.toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5,1.0,0.5);
-        if (standList.size() > 0) {
-            ArmorStand stand = standList.get(0);
-            ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-            skullMeta.setOwningPlayer(p);
-            skull.setItemMeta(skullMeta);
-            stand.getEquipment().setHelmet(skull);
-        } else plugin.getLogger().warning("no armor stand found at: " + standLoc.getBlockX() + " " + standLoc.getBlockY() + " " + standLoc.getBlockZ());
+    private void setStandHead(ArmorStand stand, OfflinePlayer donor){
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+        skullMeta.setOwningPlayer(donor);
+        skull.setItemMeta(skullMeta);
+        stand.getEquipment().setHelmet(skull);
+    }
 
-        Sign sign = (Sign)plugin.getNewDisplay().get("sign").getBlock().getState();
-        sign.setLine(1, ChatColor.of("#ffeb8b") + "NEWEST Donor");
-        sign.setLine(2, ChatColor.of("#ffffff") + p.getName());
+    private void setSign(Sign sign, OfflinePlayer donor){
+        sign.line(1, MiniMessage.miniMessage().deserialize("<white><donor>", Placeholder.unparsed("donor", donor.getName())));
+        sign.line(2, MiniMessage.miniMessage().deserialize("<#ffeb8b>Newest Donor"));
         sign.update();
     }
 }

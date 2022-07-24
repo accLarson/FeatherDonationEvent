@@ -24,47 +24,40 @@ public class UpdateDisplaysTask implements Runnable{
     public UpdateDisplaysTask(FeatherDonationEvent plugin) {
         this.plugin = plugin;
         generalDisplayUpdated = this.plugin.getConfig().getString("messages.general-display-updated");
-    }
-
-    //select random donor from ArrayList
-    private OfflinePlayer getRandomDonor(ArrayList<OfflinePlayer> donors) {
-        return donors.get(new Random().nextInt(donors.size()));
+        this.plugin.getLogger().info("Successfully started donor display.");
     }
 
     @Override
     public void run() {
-        plugin.getLogger().info("Updating display(s) | " + plugin.getGeneralDisplays().keySet().size() + " displays found in config file");
-        List<String> displayedDonors = new ArrayList<>();
-        plugin.getGeneralDisplays().keySet().forEach(display -> {
+        plugin.getLogger().info("Updating " + plugin.getGeneralDisplays().size() + " display(s).");
+        List<String> displayedDonorsList = new ArrayList<>();
+
+        // Iterate each donor display and set new stand skull and sign
+        plugin.getGeneralDisplays().keySet().forEach(k -> {
             OfflinePlayer donor = getRandomDonor(plugin.getDonors());
             plugin.removeDonor(donor);
-            displayedDonors.add(donor.getName());
-            plugin.getGeneralDisplays().get(display).get("stand").getBlock().getLocation().getChunk().load();
-            setStandHead(donor, plugin.getGeneralDisplays().get(display).get("stand").getBlock().getLocation());
-            setSign(donor, plugin.getGeneralDisplays().get(display).get("sign"));
+            displayedDonorsList.add(donor.getName());
+            setStandHead(plugin.getGeneralDisplays().get(k).keySet().iterator().next(), donor);
+            setSign(plugin.getGeneralDisplays().get(k).get(plugin.getGeneralDisplays().get(k).keySet().iterator().next()), donor);
         });
-        plugin.getServer().broadcast(MiniMessage.miniMessage().deserialize(generalDisplayUpdated, Placeholder.unparsed("donors", String.join(" ",displayedDonors))));
+        plugin.getServer().broadcast(MiniMessage.miniMessage().deserialize(generalDisplayUpdated, Placeholder.unparsed("donors", String.join(" ",displayedDonorsList))));
     }
 
-    private void setStandHead(OfflinePlayer p, Location standLoc){
-
-        standLoc.getChunk().load();
-        List<ArmorStand> standList = (List<ArmorStand>) standLoc.toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5,1.0,0.5);
-        if (standList.size() > 0) {
-            ArmorStand stand = standList.get(0);
-            ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-            skullMeta.setOwningPlayer(p);
-            skull.setItemMeta(skullMeta);
-            stand.getEquipment().setHelmet(skull);
-        } else plugin.getLogger().warning("no armor stand found at: " + standLoc.getBlockX() + " " + standLoc.getBlockY() + " " + standLoc.getBlockZ());
+    private OfflinePlayer getRandomDonor(ArrayList<OfflinePlayer> donors) {
+        return donors.get(new Random().nextInt(donors.size()));
     }
 
-    private void setSign(OfflinePlayer p, Location signLoc){
-        signLoc.getChunk().load();
-        Sign sign = (Sign)signLoc.getBlock().getState();
-        sign.setLine(1, ChatColor.of("#ffeb8b") + "Donor");
-        sign.setLine(2, ChatColor.of("#ffffff") + p.getName());
+    private void setStandHead(ArmorStand stand, OfflinePlayer donor){
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+        skullMeta.setOwningPlayer(donor);
+        skull.setItemMeta(skullMeta);
+        stand.getEquipment().setHelmet(skull);
+    }
+
+    private void setSign(Sign sign, OfflinePlayer donor){
+        sign.line(1, MiniMessage.miniMessage().deserialize("<white><donor>",Placeholder.unparsed("donor", donor.getName())));
+        sign.line(2, MiniMessage.miniMessage().deserialize("<#ffeb8b>Donor"));
         sign.update();
     }
 }
