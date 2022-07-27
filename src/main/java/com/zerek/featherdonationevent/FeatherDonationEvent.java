@@ -35,6 +35,7 @@ public final class FeatherDonationEvent extends JavaPlugin {
 
         this.perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
         this.donors = findAllDonors();
+        this.getLogger().info("Attempting to start Donor Display.");
         getServer().getScheduler().runTaskLater(this, new InitiateTask(this),200L);
         getServer().getPluginManager().registerEvents(new DonationListener(this),this);
     }

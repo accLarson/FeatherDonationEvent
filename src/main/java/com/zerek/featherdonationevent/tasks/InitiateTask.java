@@ -20,7 +20,6 @@ public class InitiateTask implements Runnable{
 
     @Override
     public void run() {
-        this.plugin.getLogger().info("Attempting to start Donor Display.");
         World world = plugin.getServer().getWorlds().get(0);
 
         // Register newest donor display.
@@ -66,14 +65,11 @@ public class InitiateTask implements Runnable{
                     }
                 }
                 else plugin.getLogger().warning("No General armor stand donor display found at: " + newestStandLoc.getBlockX() + " " + newestStandLoc.getBlockY() + " " + newestStandLoc.getBlockZ() + ".");
-
             });
         }
-        else plugin.getLogger().warning("The donor display chunks are not yet loaded. Requires a player in the area to begin displaying donors.");
 
         // Check for failed stand or sign assignment and schedule to attempt again in 10 seconds.
         if (plugin.getNewestDisplay().size() != 1 || plugin.getGeneralDisplays().size() != generalStandConfigs.size()) {
-            this.plugin.getLogger().info("Failed to start donor display. Trying again in 10 seconds");
             plugin.getServer().getScheduler().runTaskLater(plugin, new InitiateTask(plugin),200L);
         }
         // All checks passed, donor display starting.
