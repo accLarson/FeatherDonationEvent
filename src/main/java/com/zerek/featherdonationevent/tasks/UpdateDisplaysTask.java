@@ -3,8 +3,6 @@ package com.zerek.featherdonationevent.tasks;
 import com.zerek.featherdonationevent.FeatherDonationEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;

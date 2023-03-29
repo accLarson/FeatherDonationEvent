@@ -20,6 +20,11 @@ public class InitiateTask implements Runnable{
 
     @Override
     public void run() {
+
+        boolean updateOncePerDay = plugin.getConfig().getBoolean("change-display-once-per-day");
+        boolean updateOnInterval = plugin.getConfig().getBoolean("change-display-on-interval");
+        long delay = plugin.getConfig().getInt("minute-delay") * 60L * 20L;
+
         World world = plugin.getServer().getWorlds().get(0);
 
         // Register newest donor display.
@@ -72,7 +77,10 @@ public class InitiateTask implements Runnable{
         if (plugin.getNewestDisplay().size() != 1 || plugin.getGeneralDisplays().size() != generalStandConfigs.size()) {
             plugin.getServer().getScheduler().runTaskLater(plugin, new InitiateTask(plugin),200L);
         }
-        // All checks passed, donor display starting.
-        else plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateDisplaysTask(plugin), 0L, 288000L);
+
+        // All checks passed, donor display starting. (repeated or once)
+        else if (updateOncePerDay) plugin.getServer().getScheduler().runTaskLater(plugin,new UpdateDisplaysTask(plugin),0L);
+
+        else if (updateOnInterval) plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateDisplaysTask(plugin), 0L, delay *60*20);
     }
 }

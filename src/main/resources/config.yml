@@ -1,3 +1,14 @@
+# FeatherDonationEvent | Event/Commands for buycraft use as well as donor display settings
+
+#Should the donor head display(s) be updated only once per day after a restart?
+change-display-once-per-day: false
+
+#Should the donor head display(s) be updated on a delay?
+change-display-on-interval: false
+# If the above is set to true, how long should the display update delay be?
+minute-delay: 240
+
+# Randomized Donor display(s)
 general:
   1:
     stand: [ 0,0,0 ]
@@ -8,6 +19,8 @@ general:
   3:
     stand: [ 0,0,0 ]
     sign: [ 0,0,0 ]
+
+# Newest Donor display
 newest:
   stand: [ 0,0,0 ]
   sign: [ 0,0,0 ]
