@@ -1,6 +1,6 @@
-package com.zerek.featherdonationevent.tasks;
+package dev.zerek.featherdonationevent.tasks;
 
-import com.zerek.featherdonationevent.FeatherDonationEvent;
+import dev.zerek.featherdonationevent.FeatherDonationEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;

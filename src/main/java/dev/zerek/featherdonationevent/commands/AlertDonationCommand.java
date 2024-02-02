@@ -1,7 +1,7 @@
-package com.zerek.featherdonationevent.commands;
+package dev.zerek.featherdonationevent.commands;
 
-import com.zerek.featherdonationevent.FeatherDonationEvent;
-import com.zerek.featherdonationevent.events.DonationEvent;
+import dev.zerek.featherdonationevent.FeatherDonationEvent;
+import dev.zerek.featherdonationevent.events.DonationEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

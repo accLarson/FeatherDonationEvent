@@ -1,7 +1,7 @@
-package com.zerek.featherdonationevent.commands;
+package dev.zerek.featherdonationevent.commands;
 
-import com.zerek.featherdonationevent.FeatherDonationEvent;
-import com.zerek.featherdonationevent.tasks.UpdateDisplaysTask;
+import dev.zerek.featherdonationevent.FeatherDonationEvent;
+import dev.zerek.featherdonationevent.tasks.UpdateDisplaysTask;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

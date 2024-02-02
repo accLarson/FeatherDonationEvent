@@ -1,8 +1,9 @@
-package com.zerek.featherdonationevent;
+package dev.zerek.featherdonationevent;
 
-import com.zerek.featherdonationevent.commands.*;
-import com.zerek.featherdonationevent.listeners.DonationListener;
-import com.zerek.featherdonationevent.tasks.InitiateTask;
+import dev.zerek.featherdonationevent.commands.*;
+import dev.zerek.featherdonationevent.commands.*;
+import dev.zerek.featherdonationevent.listeners.DonationListener;
+import dev.zerek.featherdonationevent.tasks.InitiateTask;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;

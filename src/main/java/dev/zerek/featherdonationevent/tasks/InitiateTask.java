@@ -1,6 +1,6 @@
-package com.zerek.featherdonationevent.tasks;
+package dev.zerek.featherdonationevent.tasks;
 
-import com.zerek.featherdonationevent.FeatherDonationEvent;
+import dev.zerek.featherdonationevent.FeatherDonationEvent;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Sign;

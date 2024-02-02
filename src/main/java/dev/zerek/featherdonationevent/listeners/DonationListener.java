@@ -1,7 +1,7 @@
-package com.zerek.featherdonationevent.listeners;
+package dev.zerek.featherdonationevent.listeners;
 
-import com.zerek.featherdonationevent.FeatherDonationEvent;
-import com.zerek.featherdonationevent.events.DonationEvent;
+import dev.zerek.featherdonationevent.FeatherDonationEvent;
+import dev.zerek.featherdonationevent.events.DonationEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;

@@ -1,10 +1,10 @@
-package com.zerek.featherdonationevent.events;
+package dev.zerek.featherdonationevent.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 
-public class SupporterEvent extends Event {
+public class DonationEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
     //{purchaserName} {purchaserUuid} {username} {id} {packageName} {price}
@@ -15,7 +15,7 @@ public class SupporterEvent extends Event {
     private final String packageName;
     private final String price;
 
-    public SupporterEvent(String purchaserName, String purchaserUuid, String username, String id, String packageName, String price){
+    public DonationEvent (String purchaserName, String purchaserUuid, String username, String id, String packageName, String price){
         this.purchaserName = purchaserName;
         this.purchaserUuid = purchaserUuid;
         this.username = username;

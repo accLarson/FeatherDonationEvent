@@ -1,4 +1,4 @@
-package com.zerek.featherdonationevent.commands;
+package dev.zerek.featherdonationevent.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

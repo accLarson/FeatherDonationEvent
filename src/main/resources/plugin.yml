@@ -1,6 +1,6 @@
 name: FeatherDonationEvent
 version: '${project.version}'
-main: com.zerek.featherdonationevent.FeatherDonationEvent
+main: dev.zerek.featherdonationevent.FeatherDonationEvent
 api-version: 1.19
 depend:
   - Vault
