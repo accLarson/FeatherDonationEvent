@@ -46,11 +46,20 @@ public class UpdateDisplaysTask implements Runnable{
     }
 
     private void setStandHead(ArmorStand stand, OfflinePlayer donor){
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        skullMeta.setOwningPlayer(donor);
-        skull.setItemMeta(skullMeta);
-        stand.getEquipment().setHelmet(skull);
+        try {
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
+            skullMeta.setOwningPlayer(donor);
+            skull.setItemMeta(skullMeta);
+            stand.getEquipment().setHelmet(skull);
+        } catch (Exception e) {
+            plugin.getLogger().warning("Unable to set donor head for:  " + donor.getName());
+            plugin.getLogger().warning(e.getMessage());
+            throw new RuntimeException(e);
+
+        }
+
+
     }
 
     private void setSign(Sign sign, OfflinePlayer donor){
