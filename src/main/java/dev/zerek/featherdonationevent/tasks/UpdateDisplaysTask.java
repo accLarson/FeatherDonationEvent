@@ -49,14 +49,13 @@ public class UpdateDisplaysTask implements Runnable{
         try {
             ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
             SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-            skullMeta.setOwningPlayer(donor);
-            skull.setItemMeta(skullMeta);
+            if (!skullMeta.setOwningPlayer(donor)) plugin.getLogger().warning("SkullMeta owner not set. (" + donor.getName() +")");
+            if (!skull.setItemMeta(skullMeta)) plugin.getLogger().warning("Skull ItemMeta not set. (" + donor.getName() +")");
             stand.getEquipment().setHelmet(skull);
         } catch (Exception e) {
             plugin.getLogger().warning("Unable to set donor head for:  " + donor.getName());
             plugin.getLogger().warning(e.getMessage());
             throw new RuntimeException(e);
-
         }
 
 
