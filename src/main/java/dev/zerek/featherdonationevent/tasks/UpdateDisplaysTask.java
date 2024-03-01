@@ -22,7 +22,6 @@ public class UpdateDisplaysTask implements Runnable{
     public UpdateDisplaysTask(FeatherDonationEvent plugin) {
         this.plugin = plugin;
         generalDisplayUpdated = this.plugin.getConfig().getString("messages.general-display-updated");
-        this.plugin.getLogger().info("Successfully started donor display.");
     }
 
     @Override
@@ -33,7 +32,7 @@ public class UpdateDisplaysTask implements Runnable{
         // Iterate each donor display and set new stand skull and sign
         plugin.getGeneralDisplays().keySet().forEach(k -> {
             OfflinePlayer donor = getRandomDonor(plugin.getDonors());
-            plugin.removeDonor(donor);
+            plugin.removeDonorFromPool(donor);
             displayedDonorsList.add(donor.getName());
             setStandHead(plugin.getGeneralDisplays().get(k).keySet().iterator().next(), donor);
             setSign(plugin.getGeneralDisplays().get(k).get(plugin.getGeneralDisplays().get(k).keySet().iterator().next()), donor);

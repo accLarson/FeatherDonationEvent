@@ -1,7 +1,6 @@
 package dev.zerek.featherdonationevent;
 
 import dev.zerek.featherdonationevent.commands.*;
-import dev.zerek.featherdonationevent.commands.*;
 import dev.zerek.featherdonationevent.listeners.DonationListener;
 import dev.zerek.featherdonationevent.tasks.InitiateTask;
 import net.milkbowl.vault.permission.Permission;
@@ -39,6 +38,7 @@ public final class FeatherDonationEvent extends JavaPlugin {
         this.getLogger().info("Attempting to start Donor Display.");
         getServer().getScheduler().runTaskLater(this, new InitiateTask(this),200L);
         getServer().getPluginManager().registerEvents(new DonationListener(this),this);
+
     }
 
     @Override
@@ -54,7 +54,7 @@ public final class FeatherDonationEvent extends JavaPlugin {
         return donors;
     }
 
-    public void removeDonor(OfflinePlayer donor){
+    public void removeDonorFromPool(OfflinePlayer donor){
         donors.remove(donor);
     }
 
