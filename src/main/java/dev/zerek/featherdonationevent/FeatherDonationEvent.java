@@ -9,18 +9,21 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class FeatherDonationEvent extends JavaPlugin {
 
-    private final Map<ArmorStand, Sign> newestDisplay = new HashMap<>();
-    private final Map<Integer, Map<ArmorStand, Sign>> generalDisplays = new HashMap<>();
-
+    private ArmorStand armorStand1;
+    private ArmorStand armorStand2;
+    private ArmorStand armorStand3;
+    private ArmorStand armorStandNew;
+    private Sign sign1;
+    private Sign sign2;
+    private Sign sign3;
+    private Sign signNew;
     private ArrayList<OfflinePlayer> donors = new ArrayList<OfflinePlayer>();
     private Permission perms = null;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -36,8 +39,8 @@ public final class FeatherDonationEvent extends JavaPlugin {
         this.perms = getServer().getServicesManager().getRegistration(Permission.class).getProvider();
         this.donors = findAllDonors();
         this.getLogger().info("Attempting to start Donor Display.");
-        getServer().getScheduler().runTaskLater(this, new InitiateTask(this),200L);
-        getServer().getPluginManager().registerEvents(new DonationListener(this),this);
+        getServer().getScheduler().runTaskLater(this, new InitiateTask(this), 200L);
+        getServer().getPluginManager().registerEvents(new DonationListener(this), this);
 
     }
 
@@ -46,7 +49,7 @@ public final class FeatherDonationEvent extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    private ArrayList<OfflinePlayer> findAllDonors(){
+    public ArrayList<OfflinePlayer> findAllDonors() {
         donors.clear();
         getLogger().info("Checking " + getServer().getOfflinePlayers().length + " players for group donor.");
         Arrays.stream(getServer().getOfflinePlayers()).filter(p -> perms.playerInGroup(null, p, "donor")).forEach(p -> donors.add(p));
@@ -54,7 +57,7 @@ public final class FeatherDonationEvent extends JavaPlugin {
         return donors;
     }
 
-    public void removeDonorFromPool(OfflinePlayer donor){
+    public void removeDonorFromPool(OfflinePlayer donor) {
         donors.remove(donor);
     }
 
@@ -62,11 +65,67 @@ public final class FeatherDonationEvent extends JavaPlugin {
         return donors;
     }
 
-    public Map<ArmorStand, Sign> getNewestDisplay() {
-        return newestDisplay;
+    public ArmorStand getArmorStand1() {
+        return armorStand1;
     }
 
-    public Map<Integer, Map<ArmorStand, Sign>> getGeneralDisplays() {
-        return generalDisplays;
+    public void setArmorStand1(ArmorStand armorStand1) {
+        this.armorStand1 = armorStand1;
+    }
+
+    public ArmorStand getArmorStand2() {
+        return armorStand2;
+    }
+
+    public void setArmorStand2(ArmorStand armorStand2) {
+        this.armorStand2 = armorStand2;
+    }
+
+    public ArmorStand getArmorStand3() {
+        return armorStand3;
+    }
+
+    public void setArmorStand3(ArmorStand armorStand3) {
+        this.armorStand3 = armorStand3;
+    }
+
+    public ArmorStand getArmorStandNew() {
+        return armorStandNew;
+    }
+
+    public void setArmorStandNew(ArmorStand armorStandNew) {
+        this.armorStandNew = armorStandNew;
+    }
+
+    public Sign getSign1() {
+        return sign1;
+    }
+
+    public void setSign1(Sign sign1) {
+        this.sign1 = sign1;
+    }
+
+    public Sign getSign2() {
+        return sign2;
+    }
+
+    public void setSign2(Sign sign2) {
+        this.sign2 = sign2;
+    }
+
+    public Sign getSign3() {
+        return sign3;
+    }
+
+    public void setSign3(Sign sign3) {
+        this.sign3 = sign3;
+    }
+
+    public Sign getSignNew() {
+        return signNew;
+    }
+
+    public void setSignNew(Sign signNew) {
+        this.signNew = signNew;
     }
 }

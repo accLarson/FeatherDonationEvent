@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.ArmorStand;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,14 +34,14 @@ public class InitiateTask implements Runnable{
         Location newestSignLoc = new Location(world, newestSignConfig.get(0), newestSignConfig.get(1), newestSignConfig.get(2));
 
         // Register general donor displays.
-        Map<Integer,List<Integer>> generalStandConfigs = new HashMap<>();
-        Map<Integer,List<Integer>> generalSignConfigs = new HashMap<>();
+        Map<Integer,List<Integer>> generalStandConfigs = new LinkedHashMap<>();
+        Map<Integer,List<Integer>> generalSignConfigs = new LinkedHashMap<>();
         this.plugin.getConfig().getConfigurationSection("general").getKeys(false).forEach(k -> {
             generalStandConfigs.put(Integer.valueOf(k),plugin.getConfig().getIntegerList("general." + k + ".stand"));
             generalSignConfigs.put(Integer.valueOf(k),plugin.getConfig().getIntegerList("general." + k + ".sign"));
         });
-        Map<Integer, Location> generalStandLocs = new HashMap<>();
-        Map<Integer, Location> generalSignLocs = new HashMap<>();
+        Map<Integer, Location> generalStandLocs = new LinkedHashMap<>();
+        Map<Integer, Location> generalSignLocs = new LinkedHashMap<>();
         generalStandConfigs.keySet().forEach(k -> generalStandLocs.put(k,new Location(world, generalStandConfigs.get(k).get(0), generalStandConfigs.get(k).get(1), generalStandConfigs.get(k).get(2))));
         generalStandConfigs.keySet().forEach(k -> generalSignLocs.put(k,new Location(world, generalSignConfigs.get(k).get(0), generalSignConfigs.get(k).get(1), generalSignConfigs.get(k).get(2))));
 
@@ -50,10 +50,11 @@ public class InitiateTask implements Runnable{
 
             // Check for newest armor stand and sign at specified location and set if found.
             List<ArmorStand> newestStandList = (List<ArmorStand>) newestStandLoc.toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5,1.0,0.5);
-            if (newestStandList.size() > 0) {
+            if (!newestStandList.isEmpty()) {
                 if (newestSignLoc.getBlock().getState() instanceof Sign){
                     plugin.getLogger().info("Newest armor stand donor display and sign found.");
-                    plugin.getNewestDisplay().put(newestStandList.get(0), (Sign) newestSignLoc.getBlock().getState());
+                    plugin.setArmorStandNew(newestStandList.get(0));
+                    plugin.setSignNew((Sign) newestSignLoc.getBlock().getState());
                 }
             }
             else plugin.getLogger().warning("No newest armor stand donor display found at: " + newestStandLoc.getBlockX() + " " + newestStandLoc.getBlockY() + " " + newestStandLoc.getBlockZ() + ".");
@@ -61,12 +62,23 @@ public class InitiateTask implements Runnable{
             // Check for general armor stands and signs at specified locations and set if found.
             generalStandLocs.keySet().forEach(k -> {
                 List<ArmorStand> generalStandList = (List<ArmorStand>) generalStandLocs.get(k).toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.5,1.0,0.5);
-                if (generalStandList.size() > 0) {
+                if (!generalStandList.isEmpty()) {
                     if (generalSignLocs.get(k).getBlock().getState() instanceof Sign){
                         plugin.getLogger().info("General armor stand donor display and sign " + k + " found.");
-                        Map<ArmorStand,Sign> display = new HashMap<>();
-                        display.put(generalStandList.get(0), (Sign) generalSignLocs.get(k).getBlock().getState());
-                        plugin.getGeneralDisplays().put(k,display);
+                        switch (k) {
+                            case 1:
+                                plugin.setArmorStand1(generalStandList.get(0));
+                                plugin.setSign1((Sign) generalSignLocs.get(k).getBlock().getState());
+                                break;
+                            case 2:
+                                plugin.setArmorStand2(generalStandList.get(0));
+                                plugin.setSign2((Sign) generalSignLocs.get(k).getBlock().getState());
+                                break;
+                            case 3:
+                                plugin.setArmorStand3(generalStandList.get(0));
+                                plugin.setSign3((Sign) generalSignLocs.get(k).getBlock().getState());
+                                break;
+                        }
                     }
                 }
                 else plugin.getLogger().warning("No General armor stand donor display found at: " + newestStandLoc.getBlockX() + " " + newestStandLoc.getBlockY() + " " + newestStandLoc.getBlockZ() + ".");
@@ -74,19 +86,20 @@ public class InitiateTask implements Runnable{
         }
 
         // Check for failed stand or sign assignment and schedule to attempt again in 10 seconds.
-        if (plugin.getNewestDisplay().size() != 1 || plugin.getGeneralDisplays().size() != generalStandConfigs.size()) {
-            plugin.getServer().getScheduler().runTaskLater(plugin, new InitiateTask(plugin),200L);
-        }
+//        if (plugin.getNewestDisplay().size() != 1 || plugin.getGeneralDisplays().size() != generalStandConfigs.size()) {
+//            plugin.getServer().getScheduler().runTaskLater(plugin, new InitiateTask(plugin),200L);
+//        }
 
         // All checks passed, donor display starting. (repeated or once)
         else if (updateOncePerDay) plugin.getServer().getScheduler().runTaskLater(plugin,new UpdateDisplaysTask(plugin),0L);
 
         else if (updateOnInterval) plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateDisplaysTask(plugin), 0L, delay *60*20);
 
-        plugin.getGeneralDisplays().keySet().forEach(k -> {
-            plugin.getLogger().info(k +
-                                        " - Armor Stand: " + plugin.getGeneralDisplays().get(k).keySet().iterator().next().getLocation() +
-                                        " - Sign: " + plugin.getGeneralDisplays().get(k).get(plugin.getGeneralDisplays().get(k).keySet().iterator().next()).getLocation());
-        });
+        plugin.getLogger().info(plugin.getArmorStand1().getLocation().toString());
+        plugin.getLogger().info(plugin.getArmorStand2().getLocation().toString());
+        plugin.getLogger().info(plugin.getArmorStand3().getLocation().toString());
+        plugin.getLogger().info(plugin.getSign1().getLocation().toString());
+        plugin.getLogger().info(plugin.getSign2().getLocation().toString());
+        plugin.getLogger().info(plugin.getSign3().getLocation().toString());
     }
 }

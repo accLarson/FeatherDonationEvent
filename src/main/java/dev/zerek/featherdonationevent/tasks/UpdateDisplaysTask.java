@@ -1,14 +1,19 @@
 package dev.zerek.featherdonationevent.tasks;
 
 import dev.zerek.featherdonationevent.FeatherDonationEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.Skull;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +31,26 @@ public class UpdateDisplaysTask implements Runnable{
 
     @Override
     public void run() {
-        plugin.getLogger().info("Updating " + plugin.getGeneralDisplays().size() + " display(s).");
+        plugin.getLogger().info("Updating displays.");
         List<String> displayedDonorsList = new ArrayList<>();
 
-        // Iterate each donor display and set new stand skull and sign
-        plugin.getGeneralDisplays().keySet().forEach(k -> {
-            OfflinePlayer donor = getRandomDonor(plugin.getDonors());
-            plugin.removeDonorFromPool(donor);
-            displayedDonorsList.add(donor.getName());
-            setStandHead(plugin.getGeneralDisplays().get(k).keySet().iterator().next(), donor);
-            setSign(plugin.getGeneralDisplays().get(k).get(plugin.getGeneralDisplays().get(k).keySet().iterator().next()), donor);
-        });
+        // Set new stand skull and sign for each display
+
+        OfflinePlayer donor1 = getRandomDonor(plugin.getDonors());
+        plugin.removeDonorFromPool(donor1);
+        displayedDonorsList.add(donor1.getName());
+        setDisplay(plugin.getArmorStand1(), plugin.getSign1(), donor1);
+
+        OfflinePlayer donor2 = getRandomDonor(plugin.getDonors());
+        plugin.removeDonorFromPool(donor2);
+        displayedDonorsList.add(donor2.getName());
+        setDisplay(plugin.getArmorStand2(), plugin.getSign2(), donor2);
+
+        OfflinePlayer donor3 = getRandomDonor(plugin.getDonors());
+        plugin.removeDonorFromPool(donor3);
+        displayedDonorsList.add(donor3.getName());
+        setDisplay(plugin.getArmorStand3(), plugin.getSign3(), donor3);
+
         plugin.getServer().broadcast(MiniMessage.miniMessage().deserialize(generalDisplayUpdated, Placeholder.unparsed("donors", String.join(" ",displayedDonorsList))));
     }
 
@@ -44,25 +58,24 @@ public class UpdateDisplaysTask implements Runnable{
         return donors.get(new Random().nextInt(donors.size()));
     }
 
-    private void setStandHead(ArmorStand stand, OfflinePlayer donor){
-        try {
-            ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-            SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-            if (!skullMeta.setOwningPlayer(donor)) plugin.getLogger().warning("SkullMeta owner not set. (" + donor.getName() +")");
-            if (!skull.setItemMeta(skullMeta)) plugin.getLogger().warning("Skull ItemMeta not set. (" + donor.getName() +")");
-            stand.getEquipment().setHelmet(skull);
-        } catch (Exception e) {
-            plugin.getLogger().warning("Unable to set donor head for:  " + donor.getName());
-            plugin.getLogger().warning(e.getMessage());
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
-    private void setSign(Sign sign, OfflinePlayer donor){
-        sign.line(1, MiniMessage.miniMessage().deserialize("<white><donor>",Placeholder.unparsed("donor", donor.getName())));
-        sign.line(2, MiniMessage.miniMessage().deserialize("<#ffeb8b>Donor"));
-        sign.update();
+    private void setDisplay(ArmorStand armorStand, Sign sign, OfflinePlayer donor){
+        String donorName = donor.getName();
+//        ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD, 1);
+//        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
+//        skullMeta.setOwningPlayer(donor);
+//        skullItem.setItemMeta(skullMeta);
+        Block headBlock = armorStand.getLocation().add(0.0,2.0,0.0).getBlock();
+        headBlock.setType(Material.PLAYER_HEAD);
+        Skull skull = (Skull) headBlock.getState();
+        skull.setOwningPlayer(donor);
+        ((Rotatable) skull.getBlockData()).setRotation(((Directional) sign.getBlockData()).getFacing());
+        skull.update();
+//        armorStand.getEquipment().clear();
+//        armorStand.getEquipment().setHelmet(skull.getDrops().iterator().next());
+        sign.getSide(Side.FRONT).line(0, Component.text(""));
+        sign.getSide(Side.FRONT).line(1, Component.text(donorName).color(TextColor.fromHexString("#FFFFFF")));
+        sign.getSide(Side.FRONT).line(2, Component.text("Donor").color(TextColor.fromHexString("#FFEB8B")));
+        sign.getSide(Side.FRONT).line(3, Component.text(""));
+        sign.update(true);
     }
 }
