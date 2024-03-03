@@ -94,12 +94,5 @@ public class InitiateTask implements Runnable{
         else if (updateOncePerDay) plugin.getServer().getScheduler().runTaskLater(plugin,new UpdateDisplaysTask(plugin),0L);
 
         else if (updateOnInterval) plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateDisplaysTask(plugin), 0L, delay *60*20);
-
-        plugin.getLogger().info(plugin.getArmorStand1().getLocation().toString());
-        plugin.getLogger().info(plugin.getArmorStand2().getLocation().toString());
-        plugin.getLogger().info(plugin.getArmorStand3().getLocation().toString());
-        plugin.getLogger().info(plugin.getSign1().getLocation().toString());
-        plugin.getLogger().info(plugin.getSign2().getLocation().toString());
-        plugin.getLogger().info(plugin.getSign3().getLocation().toString());
     }
 }
