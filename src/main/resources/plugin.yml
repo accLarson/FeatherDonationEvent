@@ -1,10 +1,10 @@
 name: FeatherDonationEvent
 version: '${project.version}'
 main: dev.zerek.featherdonationevent.FeatherDonationEvent
-api-version: 1.19
+api-version: 1.20
 depend:
   - Vault
-  - BuycraftX
+  - Tebex
 authors: [ Zerek ]
 description: Creates an event when a user donates to f64
 commands:
