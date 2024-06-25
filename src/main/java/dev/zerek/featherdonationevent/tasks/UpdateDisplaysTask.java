@@ -66,43 +66,18 @@ public class UpdateDisplaysTask implements Runnable{
     private void setDisplay(ArmorStand armorStand, Sign sign, OfflinePlayer donor) {
         String donorName = donor.getName();
 
-        Skull skull = (Skull) armorStand.getLocation().add(0.0, 2.0, 0.0).getBlock();
+        Block blockAbove = armorStand.getLocation().add(0, 2, 0).getBlock();
+        blockAbove.setType(Material.PLAYER_HEAD);
+        PlayerProfile playerProfile = Bukkit.createProfile(donor.getUniqueId());
         BlockFace facing = ((Directional) sign.getBlockData()).getFacing();
-        plugin.getLogger().info("Facing: " + facing.name());
-
-        skull.setPlayerProfile(donor.getPlayerProfile());
+        Skull skull = (Skull) blockAbove.getState();
         Rotatable rotatable = (Rotatable) skull.getBlockData();
         rotatable.setRotation(facing.getOppositeFace());
         skull.setBlockData(rotatable);
-        skull.update();
 
-//        // Create the skull item with the donor's profile
-//        ItemStack skullItem = new ItemStack(Material.PLAYER_HEAD);
-//        SkullMeta skullMeta = (SkullMeta) skullItem.getItemMeta();
-//        skullMeta.setOwningPlayer(donor);
-//        skullItem.setItemMeta(skullMeta);
-//
-//        // Set the block type to player head
-//        headBlock.setType(Material.PLAYER_HEAD);
-//
-//        // Update the block state with the skull meta
-//        Skull skull = (Skull) headBlock.getState();
-//        skull.setPlayerProfile(donor.getPlayerProfile());
-//        skull.update(true);
-//
-//        // Apply rotation
-//        Rotatable rotatable = (Rotatable) skull.getBlockData();
-//        rotatable.setRotation(facing.getOppositeFace());
-//        skull.setBlockData(rotatable);
-//        skull.update(true);
-//
-//        // Schedule a delayed task to reapply the player profile
-//        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-//            Skull delayedSkull = (Skull) headBlock.getState();
-//            delayedSkull.setPlayerProfile(donor.getPlayerProfile());
-//            delayedSkull.update(true);
-//            plugin.getLogger().info("Delayed update applied to player profile for donor: " + donorName);
-//        }, 20L); // Delay of 1 second (20 ticks)
+        skull.setPlayerProfile(playerProfile);
+        skull.update(true);
+
 
         sign.getSide(Side.FRONT).line(0, Component.text(""));
         sign.getSide(Side.FRONT).line(1, Component.text(donorName).color(TextColor.fromHexString("#FFFFFF")));
@@ -110,5 +85,4 @@ public class UpdateDisplaysTask implements Runnable{
         sign.getSide(Side.FRONT).line(3, Component.text(""));
         sign.update(true);
     }
-
 }
