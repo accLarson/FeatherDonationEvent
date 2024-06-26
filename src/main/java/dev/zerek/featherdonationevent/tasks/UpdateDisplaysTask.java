@@ -64,11 +64,8 @@ public class UpdateDisplaysTask implements Runnable{
 
         Block blockAbove = armorStand.getLocation().add(0, 2, 0).getBlock();
         blockAbove.setType(Material.PLAYER_HEAD);
-
         PlayerProfile playerProfile = Bukkit.createProfile(donor.getUniqueId(),donorName);
-
         Skull skull = (Skull) blockAbove.getState();
-
         BlockFace facing = ((Directional) sign.getBlockData()).getFacing();
         Rotatable rotatable = (Rotatable) skull.getBlockData();
         rotatable.setRotation(facing.getOppositeFace());
