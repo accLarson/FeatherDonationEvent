@@ -57,7 +57,7 @@ public class DonationListener implements Listener {
 
         sign.getSide(Side.FRONT).line(0, Component.text(""));
         sign.getSide(Side.FRONT).line(1, Component.text(donorName).color(TextColor.fromHexString("#FFFFFF")));
-        sign.getSide(Side.FRONT).line(2, Component.text("Donor").color(TextColor.fromHexString("#FFEB8B")));
+        sign.getSide(Side.FRONT).line(2, Component.text("Newest Donor").color(TextColor.fromHexString("#FFEB8B")));
         sign.getSide(Side.FRONT).line(3, Component.text(""));
         sign.update(true);
     }
