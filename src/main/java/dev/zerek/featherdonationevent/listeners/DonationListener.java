@@ -32,7 +32,7 @@ public class DonationListener implements Listener {
 
     @EventHandler
     public void onDonation(DonationEvent event){
-        OfflinePlayer donor = plugin.getServer().getOfflinePlayer(UUID.fromString(event.getId()));
+        OfflinePlayer donor = plugin.getServer().getOfflinePlayer(UUID.fromString(this.addDashesToUuid(event.getId())));
         if (plugin.getArmorStandNew().getChunk().isEntitiesLoaded()){
             setDisplay(plugin.getArmorStandNew(),plugin.getSignNew(),donor);
         }
@@ -60,5 +60,16 @@ public class DonationListener implements Listener {
         sign.getSide(Side.FRONT).line(2, Component.text("Donor").color(TextColor.fromHexString("#FFEB8B")));
         sign.getSide(Side.FRONT).line(3, Component.text(""));
         sign.update(true);
+    }
+
+    private String addDashesToUuid(String uuid) {
+        if (uuid == null || uuid.length() != 32) {
+            throw new IllegalArgumentException("Cannot add dashes - Invalid UUID string: " + uuid);
+        }
+        return uuid.substring(0, 8) + "-" +
+                uuid.substring(8, 12) + "-" +
+                uuid.substring(12, 16) + "-" +
+                uuid.substring(16, 20) + "-" +
+                uuid.substring(20, 32);
     }
 }
