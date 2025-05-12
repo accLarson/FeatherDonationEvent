@@ -1,7 +1,7 @@
 name: FeatherDonationEvent
 version: '${project.version}'
 main: dev.zerek.featherdonationevent.FeatherDonationEvent
-api-version: 1.20
+api-version: 1.21
 depend:
   - Vault
   - Tebex

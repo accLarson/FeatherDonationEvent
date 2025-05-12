@@ -9,7 +9,12 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class FeatherDonationEvent extends JavaPlugin {
 
@@ -54,6 +59,16 @@ public final class FeatherDonationEvent extends JavaPlugin {
         getLogger().info("Checking " + getServer().getOfflinePlayers().length + " players for group donor.");
         Arrays.stream(getServer().getOfflinePlayers()).filter(p -> perms.playerInGroup(null, p, "donor")).forEach(p -> donors.add(p));
         getLogger().info("Found " + donors.size() + " donors.");
+
+        // FileWriter in default mode will automatically truncate (empty) the file before writing
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(getDataFolder(), "donors.txt")))) {
+            for (OfflinePlayer donor : donors) {
+                writer.write(donor.getName() + "\n");
+            }
+        } catch (IOException e) {
+            getLogger().warning("Failed to write donors to file: " + e.getMessage());
+        }
+
         return donors;
     }
 
